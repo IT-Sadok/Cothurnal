@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieDirectory", "MovieDire
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "PresentationLayer\PresentationLayer.csproj", "{860BBA17-69C7-417E-A41B-72FAAF5957FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMovie", "DataMovie\DataMovie.csproj", "{53D3E5FE-F576-4AD1-8510-81853828BABB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{860BBA17-69C7-417E-A41B-72FAAF5957FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{860BBA17-69C7-417E-A41B-72FAAF5957FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{860BBA17-69C7-417E-A41B-72FAAF5957FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D3E5FE-F576-4AD1-8510-81853828BABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D3E5FE-F576-4AD1-8510-81853828BABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D3E5FE-F576-4AD1-8510-81853828BABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D3E5FE-F576-4AD1-8510-81853828BABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
