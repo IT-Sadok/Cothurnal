@@ -1,18 +1,19 @@
 ﻿using System;
-using MovieDirectory;
 using DataMovie;
+using System.Runtime.CompilerServices;
 
-
-namespace MovieDirectory
+namespace PresentationLayer
 {
     internal class Program
     {
+        private static MovieVault _movieVault = new MovieVault();
+
         static void Main(string[] args)
         {
-            var movies = new MovieVault();
-            ChooseAnAction(movies);
+            ChooseAnAction();
         }
-        public static void ChooseAnAction(MovieVault movies)
+
+        public static void ChooseAnAction()
         {
             while (true)
             {
@@ -22,16 +23,16 @@ namespace MovieDirectory
                 switch (action)
                 {
                     case "create":
-                        Create(movies);
+                        Create();
                         break;
                     case "read":
-                        Read(movies);
+                        Read();
                         break;
                     case "update":
-                        Update(movies);
+                        Update();
                         break;
                     case "delete":
-                        Delete(movies);
+                        Delete();
                         break;
                     case "exit":
                         return;
@@ -41,13 +42,14 @@ namespace MovieDirectory
                 }
             }
         }
-        public static void Create(MovieVault movie)
+
+        public static void Create()
         {
             Console.WriteLine("Enter movie name:");
             string name = Console.ReadLine();
 
             Console.WriteLine("Enter the id of the film:");
-            if (!int.TryParse(Console.ReadLine(), out int id) || movie.movies.ContainsKey(id))
+            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault._movies.ContainsKey(id))
             {
                 Console.WriteLine("This ID already exists!");
                 return;
@@ -56,31 +58,33 @@ namespace MovieDirectory
             Console.WriteLine("Enter a description of the movie:");
             string description = Console.ReadLine();
 
-            movie.CreateMovie(name,id, description);
+            _movieVault.CreateMovie(name, id, description);
             Console.WriteLine("Film added.");
         }
-        public static void Read(MovieVault movie)
+
+        public static void Read()
         {
             Console.WriteLine("Pick out the action:\nview list of films (0)\nWatch the film by ID (1)");
             string action = Console.ReadLine().ToLower();
-            if (int.TryParse(action, out int num))
+            if (Enum.TryParse(action, out ReadMode mode))
             {
-                ReadMode(num,movie);
+                ReadAction(mode);
             }
             else
                 Console.WriteLine("Movie with such ID not found.");
         }
-        public static void ReadMode(int num, MovieVault movie)
+
+        public static void ReadAction(ReadMode mode)
         {
-            switch (num)
+            switch (mode)
             {
-                case 0:
-                    movie.ListMovies();
+                case ReadMode.List:
+                    OutputList();
                     break;
-                case 1:
+                case ReadMode.ById:
                     Console.WriteLine("Enter ID:");
                     if (int.TryParse(Console.ReadLine(), out int id))
-                        movie.ShowMovie(id);
+                        ShowMovie(id);
                     else
                         Console.WriteLine("Incorrect input ID.");
                     break;
@@ -89,24 +93,49 @@ namespace MovieDirectory
                     break;
             }
         }
-        public static void Update(MovieVault movie)
+
+        public static void ShowMovie(int id)
+        {
+            if (_movieVault._movies.TryGetValue(id, out Movie movie))
+            {
+                Console.WriteLine($"Name: {movie.Name}\nDescription: {movie.Description}");
+            }
+            else
+                Console.WriteLine("Movie with such ID not found.");
+        }
+
+        public static void OutputList()
+        {
+            if (_movieVault._movies.Count > 0)
+            {
+                foreach (var movie in _movieVault._movies)
+                {
+                    Console.WriteLine($"ID: {movie.Key}, Name: {movie.Value.Name}");
+                }
+            }
+            else
+                Console.WriteLine("the list is empty!");
+        }
+
+        public static void Update()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && movie.movies.ContainsKey(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
             {
                 Console.WriteLine("Enter new film description:");
-                movie.UpdateMovie(id, Console.ReadLine());
+                _movieVault.UpdateMovie(id, Console.ReadLine());
                 Console.WriteLine("Film description updated.");
             }
             else
                 Console.WriteLine("Movie with such ID not found.");
         }
-        public static void Delete(MovieVault movie)
+
+        public static void Delete()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && movie.movies.ContainsKey(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
             {
-                movie.DeleteMovie(id);
+                _movieVault.DeleteMovie(id);
                 Console.WriteLine("Film deleted.");
             }
             else

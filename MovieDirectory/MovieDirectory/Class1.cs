@@ -9,10 +9,10 @@ namespace MovieDirectory
 {
     public interface IMovieManager
     {
-        void CreateMovie(string name,int id,string desc);
+        void CreateMovie(string name, int id, string description);
         void ListMovies();
         void ShowMovie(int id);
-        void UpdateMovie(int id, string newDesс);
+        void UpdateMovie(int id, string newDescription);
         void DeleteMovie(int id);
     }
 }
