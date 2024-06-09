@@ -9,9 +9,9 @@ namespace MovieDirectory
 {
     public class MovieManager
     {
-        private IActionMovie? _action;
+        private IActionMovie<object>? _action;
 
-        public void SetAction(IActionMovie action)
+        public void SetAction(IActionMovie<object> action)
         {
             _action = action;
         }

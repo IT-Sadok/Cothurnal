@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Update : IActionMovie
+    internal class Update : IActionMovie<object>
     {
         public void Action(Dictionary<int, Movie> movies, params object[] data)
         {

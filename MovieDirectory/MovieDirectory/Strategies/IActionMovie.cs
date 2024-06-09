@@ -7,8 +7,8 @@ using DataMovie;
 
 namespace MovieDirectory
 { 
-    public interface IActionMovie
+    public interface IActionMovie<T>
     {
-        public void Action(Dictionary<int, Movie> movies, params object[] data);
+        public void Action(Dictionary<int, Movie> movies, params T[] data);
     }
 }

@@ -7,15 +7,22 @@ namespace PresentationLayer
 {
     internal class Program
     {
-        private static MovieVault _movieVault = new MovieVault();
-        private static MovieManager _manager = new MovieManager();
+        private MovieVault _movieVault;
+        private MovieManager _manager;
+
+        public Program()
+        {
+            _movieVault = new MovieVault();
+            _manager = new MovieManager();
+        }
 
         static void Main()
         {
-            ChooseAnAction();
+            Program program = new Program();
+            program.ChooseAnAction();
         }
 
-        public static void ChooseAnAction()
+        public void ChooseAnAction()
         {
             while (true)
             {
@@ -45,13 +52,13 @@ namespace PresentationLayer
             }
         }
 
-        public static void Create()
+        public void Create()
         {
             Console.WriteLine("Enter movie name:");
             string name = Console.ReadLine();
 
             Console.WriteLine("Enter the id of the film:");
-            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault.KeyExists(id))
+            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault.ContainsKey(id))
             {
                 Console.WriteLine("This ID already exists!");
                 return;
@@ -60,12 +67,12 @@ namespace PresentationLayer
             Console.WriteLine("Enter a description of the movie:");
             string description = Console.ReadLine();
 
-            _manager.SetAction(MovieActionFactory.GetAction(ActionType.Create));
-            _manager.ExecuteAction(_movieVault.GetMovies(), id, name, description);
+            _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Create));
+            _manager.ExecuteAction(_movieVault, id, name, description);
             Console.WriteLine("Film added.");
         }
 
-        public static void Read()
+        public void Read()
         {
             Console.WriteLine("Pick out the action:\nview list of films (0)\nWatch the film by ID (1)");
             string action = Console.ReadLine().ToLower();
@@ -77,7 +84,7 @@ namespace PresentationLayer
                 Console.WriteLine("Movie with such ID not found.");
         }
 
-        public static void ReadAction(ReadMode mode)
+        public void ReadAction(ReadMode mode)
         {
             switch (mode)
             {
@@ -97,9 +104,9 @@ namespace PresentationLayer
             }
         }
 
-        public static void ShowMovie(int id)
+        public void ShowMovie(int id)
         {
-            if (_movieVault.GetList().TryGetValue(id, out Movie movie))
+            if (_movieVault.TryGetValue(id, out Movie movie))
             {
                 Console.WriteLine(movie);
             }
@@ -107,11 +114,11 @@ namespace PresentationLayer
                 Console.WriteLine("Movie with such ID not found.");
         }
 
-        public static void OutputList()
+        public void OutputList()
         {
-            if (_movieVault.GetList().Count > 0)
+            if (_movieVault.Count > 0)
             {
-                foreach (var movie in _movieVault.GetMovies())
+                foreach (var movie in _movieVault)
                 {
                     Console.WriteLine($"ID: {movie.Key}, Name: {movie.Value.Name}");
                 }
@@ -120,27 +127,27 @@ namespace PresentationLayer
                 Console.WriteLine("the list is empty!");
         }
 
-        public static void Update()
+        public void Update()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ContainsKey(id))
             {
                 Console.WriteLine("Enter new film description:");
-                _manager.SetAction(MovieActionFactory.GetAction(ActionType.Update));
-                _manager.ExecuteAction(_movieVault.GetMovies(),id, Console.ReadLine());
+                _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Update));
+                _manager.ExecuteAction(_movieVault,id, Console.ReadLine());
                 Console.WriteLine("Film description updated.");
             }
             else
                 Console.WriteLine("Movie with such ID not found.");
         }
 
-        public static void Delete()
+        public void Delete()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ContainsKey(id))
             {
-                _manager.SetAction(MovieActionFactory.GetAction(ActionType.Delete));
-                _manager.ExecuteAction(_movieVault.GetMovies(), id);
+                _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Delete));
+                _manager.ExecuteAction(_movieVault, id);
                 Console.WriteLine("Film deleted.");
             }
             else

@@ -8,7 +8,7 @@ namespace MovieDirectory
 {
     public class MovieActionFactory
     {
-        public static IActionMovie GetAction(ActionType type)
+        public static IActionMovie<object> CreateAction(ActionType type)
         {
             return type switch
             {

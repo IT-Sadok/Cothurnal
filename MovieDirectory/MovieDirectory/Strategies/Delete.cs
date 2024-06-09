@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Delete : IActionMovie
+
+    internal class Delete : IActionMovie<object>
     {
         public void Action(Dictionary<int, Movie> movies, params object[] data)
         {

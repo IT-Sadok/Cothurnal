@@ -6,17 +6,12 @@ using System.Threading.Tasks;
 
 namespace DataMovie
 {
-    public class MovieVault 
+    public class MovieVault : Dictionary<int, Movie>
     {
-        private Dictionary<int, Movie> _movies;
+        public Dictionary<int, Movie> _movies { get; set; }
         public MovieVault()
         {
             _movies = new Dictionary<int, Movie>();
-        }
-
-        public Dictionary<int, Movie> GetMovies()
-        {
-            return _movies;
         }
 
         public IReadOnlyDictionary<int, Movie> GetList() { return _movies; }
