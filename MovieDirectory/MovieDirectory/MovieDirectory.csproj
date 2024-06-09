@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataMovie\DataMovie.csproj" />
+  </ItemGroup>
+
 </Project>

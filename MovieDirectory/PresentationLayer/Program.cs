@@ -1,5 +1,6 @@
 ﻿using System;
 using DataMovie;
+using MovieDirectory;
 using System.Runtime.CompilerServices;
 
 namespace PresentationLayer
@@ -7,8 +8,9 @@ namespace PresentationLayer
     internal class Program
     {
         private static MovieVault _movieVault = new MovieVault();
+        private static MovieManager _manager = new MovieManager();
 
-        static void Main(string[] args)
+        static void Main()
         {
             ChooseAnAction();
         }
@@ -49,7 +51,7 @@ namespace PresentationLayer
             string name = Console.ReadLine();
 
             Console.WriteLine("Enter the id of the film:");
-            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault._movies.ContainsKey(id))
+            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault.KeyExists(id))
             {
                 Console.WriteLine("This ID already exists!");
                 return;
@@ -58,7 +60,8 @@ namespace PresentationLayer
             Console.WriteLine("Enter a description of the movie:");
             string description = Console.ReadLine();
 
-            _movieVault.CreateMovie(name, id, description);
+            _manager.SetAction(MovieActionFactory.GetAction(ActionType.Create));
+            _manager.ExecuteAction(_movieVault.GetMovies(), id, name, description);
             Console.WriteLine("Film added.");
         }
 
@@ -96,9 +99,9 @@ namespace PresentationLayer
 
         public static void ShowMovie(int id)
         {
-            if (_movieVault._movies.TryGetValue(id, out Movie movie))
+            if (_movieVault.GetList().TryGetValue(id, out Movie movie))
             {
-                Console.WriteLine($"Name: {movie.Name}\nDescription: {movie.Description}");
+                Console.WriteLine(movie);
             }
             else
                 Console.WriteLine("Movie with such ID not found.");
@@ -106,9 +109,9 @@ namespace PresentationLayer
 
         public static void OutputList()
         {
-            if (_movieVault._movies.Count > 0)
+            if (_movieVault.GetList().Count > 0)
             {
-                foreach (var movie in _movieVault._movies)
+                foreach (var movie in _movieVault.GetMovies())
                 {
                     Console.WriteLine($"ID: {movie.Key}, Name: {movie.Value.Name}");
                 }
@@ -123,7 +126,8 @@ namespace PresentationLayer
             if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
             {
                 Console.WriteLine("Enter new film description:");
-                _movieVault.UpdateMovie(id, Console.ReadLine());
+                _manager.SetAction(MovieActionFactory.GetAction(ActionType.Update));
+                _manager.ExecuteAction(_movieVault.GetMovies(),id, Console.ReadLine());
                 Console.WriteLine("Film description updated.");
             }
             else
@@ -135,7 +139,8 @@ namespace PresentationLayer
             Console.WriteLine("Enter film ID:");
             if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.KeyExists(id))
             {
-                _movieVault.DeleteMovie(id);
+                _manager.SetAction(MovieActionFactory.GetAction(ActionType.Delete));
+                _manager.ExecuteAction(_movieVault.GetMovies(), id);
                 Console.WriteLine("Film deleted.");
             }
             else

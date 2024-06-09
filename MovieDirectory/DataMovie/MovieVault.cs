@@ -8,29 +8,22 @@ namespace DataMovie
 {
     public class MovieVault 
     {
-        public Dictionary<int, Movie> _movies { get; }
+        private Dictionary<int, Movie> _movies;
         public MovieVault()
         {
             _movies = new Dictionary<int, Movie>();
         }
-        public void CreateMovie(string name, int id, string description)
+
+        public Dictionary<int, Movie> GetMovies()
         {
-            _movies.Add(id, new Movie(name, description));
+            return _movies;
         }
 
-        public void UpdateMovie(int id, string newDescription)
-        {
-            _movies[id].Description = newDescription;
-        }
-
-        public void DeleteMovie(int id)
-        {
-            _movies.Remove(id);
-        }
+        public IReadOnlyDictionary<int, Movie> GetList() { return _movies; }
 
         public bool KeyExists(int id)
         {
-            return _movies.ContainsKey(0); 
+            return _movies.ContainsKey(id); 
         }
     }
 }
