@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace MovieDirectory
 {
 
-    internal class Delete : IActionMovie<int>
+    internal class Delete : IActionMovie<string>
     {
-        public void Action(Dictionary<int, Movie> movies, params int[] data)
+        public void Action(Dictionary<int, Movie> movies, params string[] data)
         {
             var id = data[0];
 
-            movies.Remove(id);
+            movies.Remove(int.Parse(id));
         }
     }
 }
