@@ -1,4 +1,4 @@
-﻿using DataMovie;
+using DataMovie;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Create : IActionMovie<object>
+    internal class Create : IActionMovie<CreateMovieModel>
     {
-        public void Action(Dictionary<int, Movie> movies, params object[] data)
+        public void Action(Dictionary<int, Movie> movies, CreateMovieModel data)
         {
-            var id = (int)data[0];
-            var name = (string)data[1];
-            var description = (string)data[2];
-
-            movies.Add(id,new Movie(name, description));
+            movies.Add(data.Id,new Movie(data.Name, data.Description));
         }
     }
 }
