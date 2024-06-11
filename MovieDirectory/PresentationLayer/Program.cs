@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DataMovie;
 using MovieDirectory;
 using System.Runtime.CompilerServices;
