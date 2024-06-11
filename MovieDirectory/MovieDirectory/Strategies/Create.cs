@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Create : IActionMovie<string>
+    internal class Create : IActionMovie<CreateMovieModel>
     {
-        public void Action(Dictionary<int, Movie> movies, params string[] data)
+        public void Action(Dictionary<int, Movie> movies, CreateMovieModel data)
         {
-            var id = int.Parse(data[0]);
-            var name = data[1];
-            var description = data[2];
-
-            movies.Add(id,new Movie(name, description));
+            movies.Add(data.Id,new Movie(data.Name, data.Description));
         }
     }
 }

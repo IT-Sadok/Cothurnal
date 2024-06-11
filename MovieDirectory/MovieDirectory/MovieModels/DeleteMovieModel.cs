@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataMovie;
 
 namespace MovieDirectory
-{ 
-    public interface IActionMovie<T>
+{
+    public class DeleteMovieModel
     {
-        public void Action(Dictionary<int, Movie> movies, T data);
+        public DeleteMovieModel(int id)
+        {
+            Id = id;
+        }
+        public int Id { get; set; }
     }
 }

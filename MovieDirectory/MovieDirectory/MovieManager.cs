@@ -16,7 +16,7 @@ namespace MovieDirectory
             _action = action;
         }
 
-        public void ExecuteAction(Dictionary<int, Movie> vault, params T[] data)
+        public void ExecuteAction(Dictionary<int, Movie> vault, T data)
         {
             if (_action == null)
                 throw new InvalidOperationException("Action is not set. Please set an action before executing.");
