@@ -8,12 +8,16 @@ namespace PresentationLayer
     internal class Program
     {
         private MovieVault _movieVault;
-        private MovieManager _manager;
+        private MovieManager<CreateMovieModel> _managerCreate;
+        private MovieManager<UpdateMovieModel> _managerUpdate;
+        private MovieManager<DeleteMovieModel> _managerDelete;
 
         public Program()
         {
             _movieVault = new MovieVault();
-            _manager = new MovieManager();
+            _managerCreate = new MovieManager<CreateMovieModel>();
+            _managerUpdate = new MovieManager<UpdateMovieModel>();
+            _managerDelete = new MovieManager<DeleteMovieModel>();
         }
 
         static void Main()
@@ -67,8 +71,8 @@ namespace PresentationLayer
             Console.WriteLine("Enter a description of the movie:");
             string description = Console.ReadLine();
 
-            _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Create));
-            _manager.ExecuteAction(_movieVault, id, name, description);
+            _managerCreate.SetAction(MovieActionFactory.CreateAction<CreateMovieModel>(ActionType.Create));
+            _managerCreate.ExecuteAction(_movieVault, new CreateMovieModel(id,name, description));
             Console.WriteLine("Film added.");
         }
 
@@ -133,8 +137,8 @@ namespace PresentationLayer
             if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ContainsKey(id))
             {
                 Console.WriteLine("Enter new film description:");
-                _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Update));
-                _manager.ExecuteAction(_movieVault,id, Console.ReadLine());
+                _managerUpdate.SetAction(MovieActionFactory.CreateAction<UpdateMovieModel>(ActionType.Update));
+                _managerUpdate.ExecuteAction(_movieVault,new UpdateMovieModel(id,Console.ReadLine()));
                 Console.WriteLine("Film description updated.");
             }
             else
@@ -146,12 +150,12 @@ namespace PresentationLayer
             Console.WriteLine("Enter film ID:");
             if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ContainsKey(id))
             {
-                _manager.SetAction(MovieActionFactory.CreateAction(ActionType.Delete));
-                _manager.ExecuteAction(_movieVault, id);
+                _managerDelete.SetAction(MovieActionFactory.CreateAction<DeleteMovieModel>(ActionType.Delete));
+                _managerDelete.ExecuteAction(_movieVault, new DeleteMovieModel(id));
                 Console.WriteLine("Film deleted.");
             }
             else
                 Console.WriteLine("Movie with such ID not found.");
         }
     }
-}
+}   

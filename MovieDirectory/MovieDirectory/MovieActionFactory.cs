@@ -8,13 +8,13 @@ namespace MovieDirectory
 {
     public class MovieActionFactory
     {
-        public static IActionMovie<object> CreateAction(ActionType type)
+        public static IActionMovie<T> CreateAction<T>(ActionType type)
         {
             return type switch
             {
-                ActionType.Create => new Create(),
-                ActionType.Update => new Update(),
-                ActionType.Delete => new Delete(),
+                ActionType.Create => new Create() as IActionMovie<T>,
+                ActionType.Update => new Update() as IActionMovie<T>,
+                ActionType.Delete => new Delete() as IActionMovie<T>,
                 _ => throw new ArgumentException("Invalid strategy type")
             };
         }
