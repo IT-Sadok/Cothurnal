@@ -9,6 +9,6 @@ namespace MovieDirectory
 { 
     public interface IActionMovie<T>
     {
-        public void Action(Dictionary<int, Movie> movies, T data);
+        public void Action(IDataMovieSave format, T data);
     }
 }

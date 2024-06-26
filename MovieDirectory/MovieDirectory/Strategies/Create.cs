@@ -9,9 +9,9 @@ namespace MovieDirectory
 {
     internal class Create : IActionMovie<CreateMovieModel>
     {
-        public void Action(Dictionary<int, Movie> movies, CreateMovieModel data)
+        public void Action(IDataMovieSave format, CreateMovieModel data)
         {
-            movies.Add(data.Id,new Movie(data.Name, data.Description));
+            format.SaveMovieToDb( data.Id ,new Movie(data.Name, data.Description));
         }
     }
 }

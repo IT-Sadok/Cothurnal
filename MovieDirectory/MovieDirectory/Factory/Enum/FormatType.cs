@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataMovie
+namespace MovieDirectory
 {
-    public class MovieVault : Dictionary<int, Movie> { }
+    public enum FormatType
+    {
+        Json,
+        CSV
+    }
 }

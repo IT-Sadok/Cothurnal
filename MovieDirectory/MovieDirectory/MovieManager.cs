@@ -10,18 +10,23 @@ namespace MovieDirectory
     public class MovieManager<T>
     {
         private IActionMovie<T>? _action;
+        private IDataMovieSave? _format;
 
         public void SetAction(IActionMovie<T> action)
         {
             _action = action;
         }
+        public void SetFormat(IDataMovieSave format)
+        {
+            _format = format;
+        }
 
-        public void ExecuteAction(Dictionary<int, Movie> vault, T data)
+        public void ExecuteAction(T data)
         {
             if (_action == null)
                 throw new InvalidOperationException("Action is not set. Please set an action before executing.");
 
-            _action.Action(vault, data);
+            _action.Action(_format,data);
         }
     }
 }

@@ -10,11 +10,11 @@ namespace MovieDirectory
 {
     internal class Delete : IActionMovie<DeleteMovieModel>
     {
-        public void Action(Dictionary<int, Movie> movies, DeleteMovieModel data)
+        public void Action(IDataMovieSave format, DeleteMovieModel data)
         {
             var id = data.Id;
 
-            movies.Remove(id);
+            format.DeleteMovieFromDb(id);
         }
     }
 }

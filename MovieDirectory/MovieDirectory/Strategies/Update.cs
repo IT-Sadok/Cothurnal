@@ -9,9 +9,9 @@ namespace MovieDirectory
 {
     internal class Update : IActionMovie<UpdateMovieModel>
     {
-        public void Action(Dictionary<int, Movie> movies, UpdateMovieModel data)
+        public void Action(IDataMovieSave format, UpdateMovieModel data)
         {
-            movies[data.Id].Description = data.Description;
+            format.UptadeMovieFromDb(data.Id,data.Description);
         }
     }
 }
