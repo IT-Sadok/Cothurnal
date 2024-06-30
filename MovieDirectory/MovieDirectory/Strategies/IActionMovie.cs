@@ -9,6 +9,6 @@ namespace MovieDirectory
 { 
     public interface IActionMovie<T>
     {
-        public void Action(IDataMovieSave format, T data);
+        public void Action(IDataRepository format, T data);
     }
 }

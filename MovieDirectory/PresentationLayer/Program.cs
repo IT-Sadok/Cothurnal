@@ -8,11 +8,12 @@ namespace PresentationLayer
 {
     internal class Program
     {
-        private IDataMovieSave _movieVault;
+        private IDataRepository _movieVault;
         private FormatType _format;
         private MovieManager<CreateMovieModel> _managerCreate;
         private MovieManager<UpdateMovieModel> _managerUpdate;
         private MovieManager<DeleteMovieModel> _managerDelete;
+        private MovieService _movieService = new MovieService();
 
         public Program()
         {
@@ -24,10 +25,10 @@ namespace PresentationLayer
         static void Main()
         {
             Program program = new Program();
-            program.ChooseAnFormat();
-            program.ChooseAnAction();
+            program.ChooseFormat();
+            program.ChooseAction();
         }
-        public void ChooseAnFormat()
+        public void ChooseFormat()
         {
             Console.WriteLine("Choose an save format:\n-Json\n-CSV");
             var format = Console.ReadLine().ToLower();
@@ -41,11 +42,14 @@ namespace PresentationLayer
                     _movieVault = new MovieVaultCSV(); 
                     _format = FormatType.CSV;
                     break;
+                default:
+                    Console.WriteLine("Incorrect input. Try again.");
+                    break;
             }
 
         }
 
-        public void ChooseAnAction()
+        public void ChooseAction()
         {
             while (true)
             {
@@ -81,7 +85,7 @@ namespace PresentationLayer
             string name = Console.ReadLine();
 
             Console.WriteLine("Enter the id of the film:");
-            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault.ReadOnlyDictOfMoviesJson().ContainsKey(id))
+            if (!int.TryParse(Console.ReadLine(), out int id) || _movieVault.GetMovies().ContainsKey(id))
             {
                 Console.WriteLine("This ID already exists!");
                 return;
@@ -130,7 +134,7 @@ namespace PresentationLayer
 
         public void ShowMovie(int id)
         {
-            if (_movieVault.ReadOnlyDictOfMoviesJson().TryGetValue(id, out Movie movie))
+            if (_movieVault.GetMovies().TryGetValue(id, out Movie movie))
             {
                 Console.WriteLine(movie);
             }
@@ -140,9 +144,9 @@ namespace PresentationLayer
 
         public void OutputList()
         {
-            if (_movieVault.ReadOnlyDictOfMoviesJson().Count > 0)
+            if (_movieVault.GetMovies().Count > 0)
             {
-                foreach (var movie in _movieVault.ReadOnlyDictOfMoviesJson())
+                foreach (var movie in _movieVault.GetMovies())
                 {
                     Console.WriteLine($"ID: {movie.Key}, Name: {movie.Value.Name}");
                 }
@@ -154,7 +158,7 @@ namespace PresentationLayer
         public void Update()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ReadOnlyDictOfMoviesJson().ContainsKey(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.GetMovies().ContainsKey(id))
             {
                 Console.WriteLine("Enter new film description:");
                 _managerUpdate.SetAction(MovieActionFactory.CreateAction<UpdateMovieModel>(ActionType.Update));
@@ -169,7 +173,7 @@ namespace PresentationLayer
         public void Delete()
         {
             Console.WriteLine("Enter film ID:");
-            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.ReadOnlyDictOfMoviesJson().ContainsKey(id))
+            if (int.TryParse(Console.ReadLine(), out int id) && _movieVault.GetMovies().ContainsKey(id))
             {
                 _managerDelete.SetAction(MovieActionFactory.CreateAction<DeleteMovieModel>(ActionType.Delete));
                 _managerDelete.SetFormat(DataMovieSaveFactory.GetInstance(_format));

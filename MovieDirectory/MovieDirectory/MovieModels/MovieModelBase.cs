@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    public record UpdateMovieModel(int id, string description) : MovieModelBase;
+    public interface MovieModelBase { }
 }

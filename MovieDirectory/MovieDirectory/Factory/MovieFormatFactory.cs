@@ -7,17 +7,16 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    public static class DataMovieSaveFactory
+    public class DataMovieSaveFactory
     {
-        private static Dictionary<FormatType, IDataMovieSave> _instances = new Dictionary<FormatType, IDataMovieSave>
+        public static IDataRepository GetInstance(FormatType formatType)
         {
-            { FormatType.Json, new MovieVaultJson() },
-            { FormatType.CSV, new MovieVaultCSV() }
-        };
-
-        public static IDataMovieSave GetInstance(FormatType formatType)
-        {
-            return _instances.TryGetValue(formatType, out var instance) ? instance : null;
+            return formatType switch
+            {
+                FormatType.Json => new MovieVaultJson(),
+                FormatType.CSV => new MovieVaultCSV(),
+                _ => throw new ArgumentException("Invalid strategy type")
+            };
         }
     }
 }

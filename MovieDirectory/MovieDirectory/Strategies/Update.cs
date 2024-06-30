@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Update : IActionMovie<UpdateMovieModel>
+    class Update : StrategyBase, IActionMovie<UpdateMovieModel>
     {
-        public void Action(IDataMovieSave format, UpdateMovieModel data)
+        public void Action(IDataRepository format, UpdateMovieModel data)
         {
-            format.UptadeMovieFromDb(data.Id,data.Description);
+            format.UpdateMovie(data.id,data.description);
         }
     }
 }

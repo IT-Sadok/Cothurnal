@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataMovie;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,18 @@ namespace MovieDirectory
 {
     public class MovieActionFactory
     {
-        public static IActionMovie<T> CreateAction<T>(ActionType type)
+        public static IActionMovie<T> CreateAction<T>(ActionType actionType) 
+            where T : MovieModelBase
         {
-            return type switch
+            StrategyBase actionInstance = actionType switch
             {
-                ActionType.Create => new Create() as IActionMovie<T>,
-                ActionType.Update => new Update() as IActionMovie<T>,
-                ActionType.Delete => new Delete() as IActionMovie<T>,
+                ActionType.Create => new Create(),
+                ActionType.Update => new Update(),
+                ActionType.Delete => new Delete(),
                 _ => throw new ArgumentException("Invalid strategy type")
             };
+
+            return actionInstance as IActionMovie<T>;
         }
     }
 }

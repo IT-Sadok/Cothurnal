@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Create : IActionMovie<CreateMovieModel>
+    internal class Create : StrategyBase, IActionMovie<CreateMovieModel>
     {
-        public void Action(IDataMovieSave format, CreateMovieModel data)
+        public void Action(IDataRepository format, CreateMovieModel data)
         {
-            format.SaveMovieToDb( data.Id ,new Movie(data.Name, data.Description));
+            format.SaveMovie( data.id ,new Movie(data.name, data.description));
         }
     }
 }

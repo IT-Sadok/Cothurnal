@@ -6,44 +6,45 @@ using System.Text;
 
 namespace DataMovie
 {
-    public class MovieVaultCSV : IDataMovieSave
+    public class MovieVaultCSV : IDataRepository
     {
         private string _dbFilePath = Path.Combine(Directory.GetCurrentDirectory(), "movies.csv");
 
         public MovieVaultCSV()
         {
-            DictOfMoviesCSV = ReadMovieFromDb();
+            MoviesDictionary = new Dictionary<int, Movie>(GetMovies());
         }
-        private Dictionary<int, Movie> DictOfMoviesCSV { get; set; }
+        private Dictionary<int, Movie> MoviesDictionary { get; set; }
 
-        public void DeleteMovieFromDb(int id)
+        public void DeleteMovie(int id)
         {
-            DictOfMoviesCSV.Remove(id);
+            MoviesDictionary.Remove(id);
 
-            CensuseDatabase();
+            SaveDatabaseToFile();
         }
 
-        public void SaveMovieToDb(int id, Movie movie)
+        public void SaveMovie(int id, Movie movie)
         {
-            DictOfMoviesCSV[id] = movie;
+            MoviesDictionary[id] = movie;
 
-            CensuseDatabase();
+            SaveDatabaseToFile();
         }
 
-        public void UptadeMovieFromDb(int id, string newDescription)
+        public void UpdateMovie(int id, string newDescription)
         {
-            DictOfMoviesCSV[id].Description = newDescription;
+            MoviesDictionary[id].Description = newDescription;
 
-            CensuseDatabase();
+            SaveDatabaseToFile();
         }
-        public Dictionary<int, Movie> ReadMovieFromDb()
+        public IReadOnlyDictionary<int, Movie> GetMovies()
         {
             if (!File.Exists(_dbFilePath))
                 return new Dictionary<int, Movie>();
 
             Dictionary<int, Movie> dictionary = new Dictionary<int, Movie>();
+            StreamReader reader;
 
-            using (StreamReader reader = new StreamReader(_dbFilePath))
+            using (reader = new StreamReader(_dbFilePath))
             {
                 string headerLine = reader.ReadLine();
                 while (!reader.EndOfStream)
@@ -61,20 +62,18 @@ namespace DataMovie
 
             return dictionary;
         }
-        public void CensuseDatabase()
+        public void SaveDatabaseToFile()
         {
-            using (StreamWriter writer = new StreamWriter(_dbFilePath))
+            StreamWriter writer;
+
+            using (writer = new StreamWriter(_dbFilePath))
             {
                 writer.WriteLine("ID,Name,Description");
-                foreach (var entry in DictOfMoviesCSV)
+                foreach (var entry in MoviesDictionary)
                 {
                     writer.WriteLine($"{entry.Key},{entry.Value.Name},{entry.Value.Description}");
                 }
             }
-        }
-        public IReadOnlyDictionary<int, Movie> ReadOnlyDictOfMoviesJson()
-        {
-            return ReadMovieFromDb();
         }
     }
 }

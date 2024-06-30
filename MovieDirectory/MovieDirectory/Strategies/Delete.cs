@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace MovieDirectory
 {
-    internal class Delete : IActionMovie<DeleteMovieModel>
+    class Delete : StrategyBase, IActionMovie<DeleteMovieModel>
     {
-        public void Action(IDataMovieSave format, DeleteMovieModel data)
+        public void Action(IDataRepository format, DeleteMovieModel data)
         {
-            var id = data.Id;
+            var id = data.id;
 
-            format.DeleteMovieFromDb(id);
+            format.DeleteMovie(id);
         }
     }
 }

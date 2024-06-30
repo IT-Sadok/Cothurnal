@@ -10,13 +10,13 @@ namespace MovieDirectory
     public class MovieManager<T>
     {
         private IActionMovie<T>? _action;
-        private IDataMovieSave? _format;
+        private IDataRepository? _format;
 
         public void SetAction(IActionMovie<T> action)
         {
             _action = action;
         }
-        public void SetFormat(IDataMovieSave format)
+        public void SetFormat(IDataRepository format)
         {
             _format = format;
         }
