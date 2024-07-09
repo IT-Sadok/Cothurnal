@@ -13,7 +13,6 @@ namespace PresentationLayer
         private MovieManager<CreateMovieModel> _managerCreate;
         private MovieManager<UpdateMovieModel> _managerUpdate;
         private MovieManager<DeleteMovieModel> _managerDelete;
-        private MovieService _movieService = new MovieService();
 
         public Program()
         {
