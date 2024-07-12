@@ -1,4 +1,4 @@
-﻿using RaceTournament;
+﻿using TournamentManagement;
 using DataRace;
 using System.Diagnostics;
 using System.Runtime.ConstrainedExecution;
@@ -7,12 +7,11 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        var tournament = new TournamentResult(Racer.GetRecers());
+        var tournament = new TournamentResult(new RacerFactory().GetRecers());
 
-        tournament.OnRaceCompleted = (racer1, racer2, winner) =>
+        tournament.OnRaceCompleted = (racerModels) =>
         {
-            Console.WriteLine($"{racer1.Name} vs {racer2.Name}: Winner is {winner.Name}");
-            
+            Console.WriteLine($"{racerModels.FirstRacer.Name} vs {racerModels.SecondRacer.Name}: Winner is {racerModels.Winner.Name}");
         };
 
         await tournament.RunTournamentAsync();

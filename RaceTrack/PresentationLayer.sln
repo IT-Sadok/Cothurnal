@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationLayer", "Presen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataRace", "DataRacer\DataRace.csproj", "{4BA9317E-501F-4C88-8464-AFE82A9702E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaceTournament", "Tournament\RaceTournament.csproj", "{047306DF-D3A7-4044-8F03-BA650168F96C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TournamentManagement", "Tournament\TournamentManagement.csproj", "{047306DF-D3A7-4044-8F03-BA650168F96C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

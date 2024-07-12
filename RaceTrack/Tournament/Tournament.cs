@@ -1,22 +1,24 @@
 ﻿using DataRace;
+using System.Collections.Concurrent;
 
-namespace RaceTournament
+namespace TournamentManagement
 {
     public class TournamentResult
     {
-        private Queue<Racer> _racers;
-        public Queue<Racer> _winners = new Queue<Racer>();
-        public Action<Racer, Racer, Racer> OnRaceCompleted;
+        private ConcurrentQueue<Racer> _racers;
+        private ConcurrentQueue<Racer> _winners;
+        public Action<RacersModel> OnRaceCompleted;
 
         public TournamentResult(List<Racer> racers)
         {
-            _racers = new Queue<Racer>(racers);
+            _racers = new ConcurrentQueue<Racer>(racers);
+            _winners = new ConcurrentQueue<Racer>();
         }
 
         public async Task RaceAsync(Racer racer1, Racer racer2)
         {
             var winner = await GetWinnerAsync(racer1, racer2);
-            OnRaceCompleted(racer1, racer2, winner);
+            OnRaceCompleted(new RacersModel(racer1, racer2, winner));
             _winners.Enqueue(winner);
         }
 
@@ -29,33 +31,34 @@ namespace RaceTournament
 
         public async Task RunTournamentAsync()
         {
+            var tasks = new List<Task>();
+
             while (_racers.Count > 1)
             {
-                var tasks = new List<Task>();
-
                 while (_racers.Count > 1)
                 {
-                    var firstRacer = _racers.Dequeue();
-                    var secondRacer = _racers.Dequeue();
+                    _racers.TryDequeue(out Racer firstRacer);
+                    _racers.TryDequeue(out Racer secondRacer);
 
                     tasks.Add(RaceAsync(firstRacer, secondRacer));
 
                     if (tasks.Count >= 5)
                     {
-                        await Task.WhenAll(tasks);
+                        await Task.WhenAny(tasks);
                         tasks.Clear();
                     }
                 }
                 await Task.WhenAll(tasks);
 
-                _racers = new Queue<Racer>(_winners);
+                _racers = new ConcurrentQueue<Racer>(_winners);
                 _winners.Clear();
             }
         }
 
-        public Racer GetWinner()
+        public Racer? GetWinner()
         {
-            return _racers.Count == 1 ? _racers.Peek() : null;
+            _racers.TryPeek(out Racer racer);
+            return _racers.Count == 1 ? racer : null;
         }
     }
 }

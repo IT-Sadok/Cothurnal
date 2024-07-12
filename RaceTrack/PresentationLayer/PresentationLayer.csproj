@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataRacer\DataRace.csproj" />
-    <ProjectReference Include="..\Tournament\RaceTournament.csproj" />
+    <ProjectReference Include="..\Tournament\TournamentManagement.csproj" />
   </ItemGroup>
 
 </Project>
