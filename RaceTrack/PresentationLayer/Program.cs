@@ -11,7 +11,7 @@ class Program
 
         tournament.OnRaceCompleted = (racerModels) =>
         {
-            Console.WriteLine($"{racerModels.FirstRacer.Name} vs {racerModels.SecondRacer.Name}: Winner is {racerModels.Winner.Name}");
+            PrintRaceResult(racerModels);
         };
 
         await tournament.RunTournamentAsync();
@@ -21,5 +21,10 @@ class Program
             var winner = tournament.GetWinner();
             Console.WriteLine($"Tournament Winner is {winner.Name}");
         }
+    }
+
+    public static void PrintRaceResult(RacersModel racerModels)
+    {
+        Console.WriteLine($"{racerModels.firstRacer.Name} vs {racerModels.secondRacer.Name}: Winner is {racerModels.winner.Name}");
     }
 }
