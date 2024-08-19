@@ -9,10 +9,12 @@ namespace BusinessLogic
     public class JwtService : IJwtService
     {
         private readonly JwtOptions _JwtOptions;
+
         public JwtService(IOptions<JwtOptions> jwtOptions)
         {
             _JwtOptions = jwtOptions.Value;
         }
+
         public string GenerateJwt(Guid userId, string userName)
         {
             var tokenDescriptor = new SecurityTokenDescriptor

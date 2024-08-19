@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace DataAccounts.Repositories
 {
-    public interface IUserRepositories
+    public interface IUserRepository
     {
         Task Register(User user, string role);
-        Task<User> GetEmail(string email);
+        Task<User> GetByEmail(string email);
         Task<bool> IsCorrectPassword(string email, string password);
     }
 }

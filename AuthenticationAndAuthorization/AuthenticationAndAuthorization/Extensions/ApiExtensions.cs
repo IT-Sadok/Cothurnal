@@ -13,6 +13,16 @@ namespace AuthenticationAndAuthorization.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
                 AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {

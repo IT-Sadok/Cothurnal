@@ -9,10 +9,10 @@ namespace BusinessLogic
 {
     public class UserService: IUserService
     {
-        private readonly IUserRepositories _userRepositories;
+        private readonly IUserRepository _userRepositories;
         private readonly IJwtService _jwtService;
         
-        public UserService(IUserRepositories userRepositories, IJwtService jwtService)
+        public UserService(IUserRepository userRepositories, IJwtService jwtService)
         {
             _userRepositories = userRepositories;
             _jwtService = jwtService;
@@ -20,13 +20,13 @@ namespace BusinessLogic
 
         public async Task<string> LoginUserAsync(LoginUserRequest model)
         {
-            var user = await _userRepositories.GetEmail(model.Email);
+            var user = await _userRepositories.GetByEmail(model.Email);
             var result = await _userRepositories.IsCorrectPassword(model.Email,model.Password);
             if (result == false)
             {
                 throw new ArgumentException();
             }
-            return _jwtService.GenerateJwt(user.Id,user.Username);
+            return _jwtService.GenerateJwt(user.Id,user.UserName);
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest request)
@@ -38,7 +38,13 @@ namespace BusinessLogic
                 role = "Admin";
             }
 
-            var user = new User(Guid.NewGuid(), request.Username, request.Email, request.Password);
+            var user = new User()
+            {
+                Id = Guid.NewGuid(),
+                UserName = request.Email,
+                Email = request.Email,
+                PasswordHash = request.Password
+            };
 
             await _userRepositories.Register(user, role);
         }

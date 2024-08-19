@@ -9,30 +9,22 @@ using DataAccounts;
 using DataAccounts.Repositories;
 using BusinessLogic.Model;
 using AuthenticationAndAuthorization;
+using AuthenticationAndAuthorization.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddApiAuthencation(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IUserRepositories, UserRepositories>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<RoleProvider>(); 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DataBase")));
-
-builder.Services.AddIdentity<UserEntity, IdentityRole<Guid>>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = false;
-})
-.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 

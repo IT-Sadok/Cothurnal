@@ -7,25 +7,25 @@ using System.Data;
 
 namespace DataAccounts
 {
-    public class UserRepositories : IUserRepositories
+    public class UserRepository : IUserRepository
     {
-        private readonly UserManager<UserEntity> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UserRepositories(UserManager<UserEntity> userManager)
+        public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
         public async Task Register(User user, string role)
         {
-            var userEntity = new UserEntity
+            var userEntity = new User
             {
                 Id = user.Id,
-                UserName = user.Username,
+                UserName = user.UserName,
                 Email = user.Email,
             };
 
-            var result = await _userManager.CreateAsync(userEntity, user.Password);
+            var result = await _userManager.CreateAsync(userEntity, user.PasswordHash);
 
             if (result.Succeeded)
             {
@@ -33,18 +33,23 @@ namespace DataAccounts
             }
         }
 
-        public async Task<User> GetEmail(string email)
+        public async Task<User> GetByEmail(string email)
         {
             var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
 
             if (user != null)
             {
-                return new User(user.Id,user.UserName!,user.Email!,user.PasswordHash!);
+                return new User()
+                {
+                    UserName = user.Email,
+                    Email = user.Email,
+                    PasswordHash = user.PasswordHash
+                }; ;
             }
-            throw new NullReferenceException();
+            return null;
         }
 
-        public async Task<bool> IsCorrectPassword(string email,string password)
+        public async Task<bool> IsCorrectPassword(string email, string password)
         {
             var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
             var result = await _userManager.CheckPasswordAsync(user!, password);

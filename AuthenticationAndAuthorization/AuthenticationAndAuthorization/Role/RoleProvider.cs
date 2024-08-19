@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AuthenticationAndAuthorization.Role;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace AuthenticationAndAuthorization
@@ -14,7 +15,7 @@ namespace AuthenticationAndAuthorization
 
         public async Task AddRoles()
         {
-            string[] roles = { "User", "Admin" };
+            string[] roles = { UserConstants.User, UserConstants.Admin };
 
             foreach (var roleName in roles)
             {
