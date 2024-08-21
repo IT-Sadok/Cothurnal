@@ -1,15 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using BusinessLogic;
 using DataAccounts;
 using DataAccounts.Repositories;
 using BusinessLogic.Model;
-using AuthenticationAndAuthorization;
 using AuthenticationAndAuthorization.Extensions;
+using AuthenticationAndAuthorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +25,8 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

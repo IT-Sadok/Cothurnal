@@ -1,4 +1,5 @@
-﻿using DataAccounts.Repositories;
+﻿using AutoMapper;
+using DataAccounts.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,22 +11,18 @@ namespace DataAccounts
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
 
         public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task Register(User user, string role)
+        public async Task Register(CreateUserDto user, string role)
         {
-            var userEntity = new User
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-            };
+            var userEntity = _mapper.Map<User>(user);
 
-            var result = await _userManager.CreateAsync(userEntity, user.PasswordHash);
+            var result = await _userManager.CreateAsync(userEntity, user.Password);
 
             if (result.Succeeded)
             {
@@ -57,4 +54,4 @@ namespace DataAccounts
             return result;
         }
     }
-} 
+}

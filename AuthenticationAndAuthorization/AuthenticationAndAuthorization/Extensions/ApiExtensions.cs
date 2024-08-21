@@ -13,6 +13,8 @@ namespace AuthenticationAndAuthorization.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            services.AddAutoMapper(typeof(AppMappingProfile));
+
             services.AddIdentity<User, IdentityRole<Guid>>(options =>
             {
                 options.Password.RequireDigit = true;

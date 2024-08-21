@@ -2,8 +2,6 @@
 using BusinessLogic.Model;
 using DataAccounts;
 using DataAccounts.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic
 {
@@ -22,28 +20,30 @@ namespace BusinessLogic
         {
             var user = await _userRepositories.GetByEmail(model.Email);
             var result = await _userRepositories.IsCorrectPassword(model.Email,model.Password);
+
             if (result == false)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Password is not correct!");
             }
+
             return _jwtService.GenerateJwt(user.Id,user.UserName);
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest request)
         {
-            string role = "User";
+            string role = UserConstants.User;
 
             if (request.Email.Equals("admin@example.com", StringComparison.OrdinalIgnoreCase))
             {
-                role = "Admin";
+                role = UserConstants.Admin;
             }
 
-            var user = new User()
+            var user = new CreateUserDto()
             {
                 Id = Guid.NewGuid(),
                 UserName = request.Email,
                 Email = request.Email,
-                PasswordHash = request.Password
+                Password = request.Password
             };
 
             await _userRepositories.Register(user, role);

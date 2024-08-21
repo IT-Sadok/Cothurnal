@@ -1,5 +1,5 @@
-﻿using AuthenticationAndAuthorization.Role;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using DataAccounts;
 using System.Threading.Tasks;
 
 namespace AuthenticationAndAuthorization

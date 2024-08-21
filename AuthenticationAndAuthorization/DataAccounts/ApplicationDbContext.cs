@@ -9,9 +9,7 @@ namespace DataAccounts
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {
-            Database.Migrate();
         }
-
-        public DbSet<User> Account => Set<User>();
+        public DbSet<User> Accounts { get; set; }
     }
 }
