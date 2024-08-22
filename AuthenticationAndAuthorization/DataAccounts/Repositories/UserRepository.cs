@@ -11,22 +11,19 @@ namespace DataAccounts
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
 
         public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
 
-        public async Task Register(CreateUserDto user, string role)
+        public async Task Register(User user, string role)
         {
-            var userEntity = _mapper.Map<User>(user);
-
-            var result = await _userManager.CreateAsync(userEntity, user.Password);
+            var result = await _userManager.CreateAsync(user);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(userEntity, role);
+                await _userManager.AddToRoleAsync(user, role);
             }
         }
 
@@ -36,12 +33,7 @@ namespace DataAccounts
 
             if (user != null)
             {
-                return new User()
-                {
-                    UserName = user.Email,
-                    Email = user.Email,
-                    PasswordHash = user.PasswordHash
-                }; ;
+                return user;
             }
             return null;
         }
@@ -49,9 +41,8 @@ namespace DataAccounts
         public async Task<bool> IsCorrectPassword(string email, string password)
         {
             var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
-            var result = await _userManager.CheckPasswordAsync(user!, password);
 
-            return result;
+            return password == user.PasswordHash;
         }
     }
 }

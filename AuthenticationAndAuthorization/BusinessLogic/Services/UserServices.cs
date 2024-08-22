@@ -1,7 +1,9 @@
-﻿using BusinessLogic;
+﻿using AutoMapper;
+using BusinessLogic;
 using BusinessLogic.Model;
 using DataAccounts;
 using DataAccounts.Repositories;
+using System;
 
 namespace BusinessLogic
 {
@@ -9,11 +11,13 @@ namespace BusinessLogic
     {
         private readonly IUserRepository _userRepositories;
         private readonly IJwtService _jwtService;
+        private readonly IMapper _mapper;
         
-        public UserService(IUserRepository userRepositories, IJwtService jwtService)
+        public UserService(IUserRepository userRepositories, IJwtService jwtService, IMapper mapper)
         {
             _userRepositories = userRepositories;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
 
         public async Task<string> LoginUserAsync(LoginUserRequest model)
@@ -26,7 +30,7 @@ namespace BusinessLogic
                 throw new ArgumentException("Password is not correct!");
             }
 
-            return _jwtService.GenerateJwt(user.Id,user.UserName);
+            return _jwtService.GenerateJwt(user.Id, user.UserName);
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest request)
@@ -38,15 +42,9 @@ namespace BusinessLogic
                 role = UserConstants.Admin;
             }
 
-            var user = new CreateUserDto()
-            {
-                Id = Guid.NewGuid(),
-                UserName = request.Email,
-                Email = request.Email,
-                Password = request.Password
-            };
+            var user = _mapper.Map<User>(request);
 
-            await _userRepositories.Register(user, role);
+            await _userRepositories.Register(user,role);
         }
     }
 }

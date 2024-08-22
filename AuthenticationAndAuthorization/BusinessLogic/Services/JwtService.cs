@@ -25,7 +25,7 @@ namespace BusinessLogic
                 new Claim(JwtRegisteredClaimNames.Name, userName)
             };
 
-            foreach (var role in UserConstants.GetRole())
+            foreach (var role in UserConstants.Roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }

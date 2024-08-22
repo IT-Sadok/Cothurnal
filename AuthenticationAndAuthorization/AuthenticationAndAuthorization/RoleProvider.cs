@@ -15,7 +15,7 @@ namespace AuthenticationAndAuthorization
 
         public async Task AddRoles()
         {
-            string[] roles = { UserConstants.User, UserConstants.Admin };
+            var roles = UserConstants.Roles;
 
             foreach (var roleName in roles)
             {
