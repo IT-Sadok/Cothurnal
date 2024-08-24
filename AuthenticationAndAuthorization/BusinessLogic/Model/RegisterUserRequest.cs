@@ -11,6 +11,6 @@ namespace BusinessLogic
     (
         [Required] string Username,
         [Required] string Email,
-        [Required] string PasswordHash
+        [Required] string Password
     );
 }

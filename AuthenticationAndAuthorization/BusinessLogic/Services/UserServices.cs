@@ -22,8 +22,11 @@ namespace BusinessLogic
 
         public async Task<string> LoginUserAsync(LoginUserRequest model)
         {
+            var isPersistent = true;
+            var lockoutOnFailure = false;
+
             var user = await _userRepositories.GetByEmail(model.Email);
-            var result = await _userRepositories.IsCorrectPassword(model.Email,model.Password);
+            var result = await _userRepositories.SignIn(model.Email,model.Password, isPersistent, lockoutOnFailure);
 
             if (result == false)
             {
@@ -44,7 +47,7 @@ namespace BusinessLogic
 
             var user = _mapper.Map<User>(request);
 
-            await _userRepositories.Register(user,role);
+            await _userRepositories.Register(user,request.Password,role);
         }
     }
 }

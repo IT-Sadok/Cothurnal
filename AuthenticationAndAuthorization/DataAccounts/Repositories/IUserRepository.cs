@@ -8,8 +8,8 @@ namespace DataAccounts.Repositories
 {
     public interface IUserRepository
     {
-        Task Register(User user, string role);
+        Task Register(User user, string password, string role);
         Task<User> GetByEmail(string email);
-        Task<bool> IsCorrectPassword(string email, string password);
+        Task<bool> SignIn(string email, string password, bool isPersistent, bool lockoutOnFailure);
     }
 }
