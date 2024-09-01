@@ -3,6 +3,7 @@ using BusinessLogic;
 using BusinessLogic.Model;
 using DataAccounts;
 using DataAccounts.Repositories;
+using Microsoft.AspNetCore.Identity;
 using System;
 
 namespace BusinessLogic
@@ -26,6 +27,8 @@ namespace BusinessLogic
             var lockoutOnFailure = false;
 
             var user = await _userRepositories.GetByEmail(model.Email);
+            var roles = await _userRepositories.GetUserRoles(user);
+
             var result = await _userRepositories.SignIn(model.Email,model.Password, isPersistent, lockoutOnFailure);
 
             if (result == false)
@@ -33,7 +36,7 @@ namespace BusinessLogic
                 throw new ArgumentException("Password is not correct!");
             }
 
-            return _jwtService.GenerateJwt(user.Id, user.UserName);
+            return _jwtService.GenerateJwt(user.Id, user.UserName, roles);
         }
 
         public async Task RegisterUserAsync(RegisterUserRequest request)

@@ -8,20 +8,45 @@ namespace DataAccounts
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserRepository(UserManager<User> userManager,SignInManager<User> signInManager)
+        public UserRepository(UserManager<User> userManager, SignInManager<User> signInManager, IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task Register(User user,string password, string role)
+        public async Task Register(User user, string password, string role)
         {
-            var result = await _userManager.CreateAsync(user,password);
+            await _unitOfWork.BeginTransactionAsync();
 
-            if (result.Succeeded)
+            try
             {
-                await _userManager.AddToRoleAsync(user, role);
+                var result = await _userManager.CreateAsync(user, password);
+
+                if (result.Succeeded)
+                {
+                    var roleResult = await _userManager.AddToRoleAsync(user, role);
+
+                    if (roleResult.Succeeded)
+                    {
+                        await _unitOfWork.CommitAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("Failed to assign role to user.");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Failed to create user.");
+                }
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
             }
         }
 
@@ -36,15 +61,12 @@ namespace DataAccounts
             return false;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<IList<string>> GetUserRoles(User user)
         {
-            var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
-
-            if (user != null)
-            {
-                return user;
-            }
-            return null;
+            return await _userManager.GetRolesAsync(user);
         }
+
+        public Task<User> GetByEmail(string email) =>
+            _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
     }       
 }

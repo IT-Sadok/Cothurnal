@@ -10,6 +10,6 @@ namespace DataAccounts
         : base(options)
         {
         }
-        public DbSet<User> Accounts { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

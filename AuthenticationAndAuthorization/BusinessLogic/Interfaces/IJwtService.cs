@@ -8,6 +8,6 @@ namespace BusinessLogic
 {
     public interface IJwtService
     {
-        public string GenerateJwt(Guid userId, string usesrName);
+        public string GenerateJwt(Guid userId, string userName, IList<string> roles);
     }
 }

@@ -17,7 +17,7 @@ namespace BusinessLogic
             _JwtOptions = jwtOptions.Value;
         }
 
-        public string GenerateJwt(Guid userId, string userName)
+        public string GenerateJwt(Guid userId, string userName, IList<string> roles)
         {
             var claims = new List<Claim>
             {
@@ -25,7 +25,7 @@ namespace BusinessLogic
                 new Claim(JwtRegisteredClaimNames.Name, userName)
             };
 
-            foreach (var role in UserConstants.Roles)
+            foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
