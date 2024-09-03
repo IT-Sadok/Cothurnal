@@ -33,7 +33,7 @@ namespace BusinessLogic
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddMinutes(_JwtOptions.TokenLifetimeInMinutes),
                 Issuer = _JwtOptions.Issuer,
                 Audience = _JwtOptions.Audience,
                 SigningCredentials = new SigningCredentials(

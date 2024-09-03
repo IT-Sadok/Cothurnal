@@ -25,6 +25,7 @@ namespace BusinessLogic
         {
             var isPersistent = true;
             var lockoutOnFailure = false;
+            var tokenLifeTime = 5;
 
             var user = await _userRepositories.GetByEmail(model.Email);
             var roles = await _userRepositories.GetUserRoles(user);

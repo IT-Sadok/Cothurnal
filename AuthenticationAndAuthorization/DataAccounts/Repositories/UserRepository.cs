@@ -35,18 +35,18 @@ namespace DataAccounts
                     }
                     else
                     {
-                        throw new Exception("Failed to assign role to user.");
+                        throw new InvalidOperationException("Failed to assign role to user.");
                     }
                 }
                 else
                 {
-                    throw new Exception("Failed to create user.");
+                    throw new InvalidOperationException("Failed to create user.");
                 }
             }
             catch
             {
                 await _unitOfWork.RollbackAsync();
-                throw;
+                throw new OperationCanceledException("Transaction was rolled back due to an error.");
             }
         }
 
