@@ -6,6 +6,14 @@ using DataAccounts.Repositories;
 using BusinessLogic.Model;
 using AuthenticationAndAuthorization.Extensions;
 using AuthenticationAndAuthorization;
+using DataAccounts.Repositories.GenreRopository;
+using BusinessLogic.Interfaces;
+using BusinessLogic.Services;
+using BusinessLogic.Model.MovieModel;
+using DataAccounts.Repositories.MovieRepositories;
+using DataAccounts.Repositories.GenreRepositories;
+using BusinessLogic.Model.GenreModel;
+using AuthenticationAndAuthorization.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +25,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<RoleProvider>(); 
 builder.Services.AddHttpContextAccessor();
 
@@ -45,10 +57,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapPost("sign-up", ([FromServices] IUserService userService, [FromBody] RegisterUserRequest usermodel)
-    => userService.RegisterUserAsync(usermodel));
-
-app.MapPost("sign-in", ([FromServices] IUserService userService, [FromBody] LoginUserRequest usermodel)
-    => userService.LoginUserAsync(usermodel));
+app.MapUserEndpoints();
+app.MapMovieEndpoints();
+app.MapGenreEndpoints();
 
 app.Run();
