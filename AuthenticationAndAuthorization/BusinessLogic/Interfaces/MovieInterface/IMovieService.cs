@@ -9,7 +9,7 @@ namespace BusinessLogic.Interfaces
         Task UpdateMovieAsync(UpdateMovieModel updateModel);
         Task DeleteMovieAsync(DeleteMovieModel deleteModel);
         Task<MovieInfo> GetMovieAsync(GetMovieModel getModel);
-        Task<List<MovieInfo>> MovieFilter(GetListMovieModel filtrModel);
+        Task<PageModel<MovieInfo>> MovieFilter(GetListMovieModel filtrModel);
         Task AddGenresAsync(AddGenreModel addGenreModel);
     }
 }

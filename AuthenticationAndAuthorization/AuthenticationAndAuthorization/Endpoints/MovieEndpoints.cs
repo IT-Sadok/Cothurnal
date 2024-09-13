@@ -22,13 +22,11 @@ namespace AuthenticationAndAuthorization.Endpoints
             endpoints.MapPost("movies/{movieId}/genres/{genreId}", ([FromServices] IMovieService movieService, [FromBody] AddGenreModel addGenreModel)
                 => movieService.AddGenresAsync(addGenreModel)).RequireAuthorization(Policies.AdminPolicy);
 
-            endpoints.MapPost("movies/{filter}", ([FromServices] IMovieService movieService, [FromBody] GetListMovieModel filterModel)
-                => movieService.MovieFilter(filterModel)).RequireAuthorization(Policies.UserPolicy);
+            endpoints.MapGet("movies/{filterMovie}", ([FromServices] IMovieService movieService, [AsParameters] GetListMovieModel filterModel)
+               => movieService.MovieFilter(filterModel)).RequireAuthorization(Policies.UserPolicy);
 
-            endpoints.MapPost("movies/{movieId}", ([FromServices] IMovieService movieService, [FromBody] GetMovieModel getModel)
+            endpoints.MapGet("movies/{movieId:int}", ([FromServices] IMovieService movieService, [AsParameters] GetMovieModel getModel)
                 => movieService.GetMovieAsync(getModel)).RequireAuthorization(Policies.UserPolicy);
         }
-
     }
-
 }

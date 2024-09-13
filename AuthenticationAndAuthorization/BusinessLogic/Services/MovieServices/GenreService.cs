@@ -5,6 +5,7 @@ using DataAccounts.Repositories.GenreRopository;
 using AutoMapper;
 using DataAccounts.Entitys.GenreEntitys;
 using System.IO;
+using DataAccounts.Entitys;
 
 namespace BusinessLogic.Services
 {
@@ -29,10 +30,18 @@ namespace BusinessLogic.Services
             await _genreRepository.DeleteGenreAsync(deleteModel.id);
         }
 
-        public async Task<List<GenreDto>> GetGenre(GetGenresListModel filterModel)
+        public async Task<PageModel<GenreDto>> GetGenre(GetGenresListModel filterModel)
         {
-            var genres = await _genreRepository.GetGenresAsync(filterModel);
-            return _mapper.Map<List<GenreDto>>(genres);
+            var genresPage = await _genreRepository.GetGenresAsync(filterModel);
+            var genreDtos = _mapper.Map<List<GenreDto>>(genresPage.Items);
+
+            return new PageModel<GenreDto>(
+                currentPage: genresPage.CurrentPage,
+                nextPage: genresPage.NextPage,
+                totalCount: genresPage.TotalCount,
+                items: genreDtos
+            );
         }
+
     }
 }

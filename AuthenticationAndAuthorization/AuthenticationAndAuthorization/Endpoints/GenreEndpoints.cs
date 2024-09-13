@@ -16,9 +16,8 @@ namespace AuthenticationAndAuthorization.Endpoints
             endpoints.MapDelete("genres/{id:int}", ([FromServices] IGenreService genreService, [FromBody] DeleteGenreModel genre)
                 => genreService.DeleteGenre(genre)).RequireAuthorization(Policies.AdminPolicy);
 
-            endpoints.MapPost("genres/{filter}", ([FromServices] IGenreService genreService, [FromBody] GetGenresListModel filterModel)
+            endpoints.MapGet("genres", ([FromServices] IGenreService genreService, [AsParameters] GetGenresListModel filterModel)
                 => genreService.GetGenre(filterModel)).RequireAuthorization(Policies.UserPolicy);
         }
     }
-
 }

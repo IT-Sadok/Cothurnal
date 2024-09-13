@@ -13,7 +13,7 @@ namespace DataAccounts.Repositories.MovieRepositories
         Task CreateMovieAsync(Movie movie);
         Task UpdateMovieAsync(int id, string newDescription);
         Task DeleteMovieAsync(int id);
-        Task<List<Movie>> GetMoviesListAsync(GetListMovieModel filtrModel);
+        Task<PageModel<Movie>> GetMoviesListAsync(GetListMovieModel filtrModel);
         Task<Movie> GetMovieByIdAsync(int movieId);
         Task AddGenresToMovieAsync(int movieId, List<int> genreIds);
     }

@@ -42,11 +42,17 @@ namespace BusinessLogic.Services
             await _movieRepository.DeleteMovieAsync(deleteModel.id);
         }
 
-        public async Task<List<MovieInfo>> MovieFilter(GetListMovieModel filtrModel)
+        public async Task<PageModel<MovieInfo>> MovieFilter(GetListMovieModel filtrModel)
         {
-            var listOfMovie =  await _movieRepository.GetMoviesListAsync(filtrModel);
+            var moviePage =  await _movieRepository.GetMoviesListAsync(filtrModel);
+            var movies = _mapper.Map<List<MovieInfo>>(moviePage.Items);
 
-            return _mapper.Map<List<MovieInfo>>(listOfMovie);
+            return new PageModel<MovieInfo>(
+                currentPage: moviePage.CurrentPage,
+                nextPage: moviePage.NextPage,
+                totalCount: moviePage.TotalCount,
+                items: movies
+            );
         }
 
         public async Task<MovieInfo> GetMovieAsync(GetMovieModel getModel)

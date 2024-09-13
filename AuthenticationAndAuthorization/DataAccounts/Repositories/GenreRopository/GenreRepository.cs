@@ -42,16 +42,24 @@ namespace DataAccounts.Repositories.GenreRepositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Genre>> GetGenresAsync(GetGenresListModel filterModel)
+        public async Task<PageModel<Genre>> GetGenresAsync(GetGenresListModel filterModel)
         {
             var query = _context.Genres.AsQueryable();
 
             var totalCount = await query.CountAsync();
-
-            return await query
+            var items = await query
                 .Skip((filterModel.pageNumber - 1) * filterModel.pageSize)
                 .Take(filterModel.pageSize)
                 .ToListAsync();
+
+            var nextPage = (filterModel.pageNumber * filterModel.pageSize) < totalCount ? (int?)filterModel.pageNumber + 1 : null;
+
+            return new PageModel<Genre>(
+                currentPage: filterModel.pageNumber,
+                nextPage: nextPage,
+                totalCount: totalCount,
+                items: items
+            );
         }
     }
 }

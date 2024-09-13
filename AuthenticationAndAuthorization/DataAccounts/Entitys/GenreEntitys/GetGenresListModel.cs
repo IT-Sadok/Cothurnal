@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace DataAccounts.Entitys.GenreEntitys
 {
-    public record GetGenresListModel(int pageNumber, int pageSize);
+    public record GetGenresListModel(int pageNumber = 1, int pageSize = 10);
 }

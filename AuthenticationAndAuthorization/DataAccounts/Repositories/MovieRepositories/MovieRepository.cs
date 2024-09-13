@@ -1,4 +1,5 @@
 ﻿using DataAccounts.Entitys;
+using DataAccounts.Entitys.MovieEntitys;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -41,39 +42,43 @@ namespace DataAccounts.Repositories.MovieRepositories
                 .ThenInclude(mg => mg.Genre)
                 .FirstOrDefaultAsync(m => m.Id == movieId);
 
-            if (movie != null)
-            {
-                movie.Views++;
-                await _context.SaveChangesAsync();
-            }
-
             return movie;
         }
 
-        public async Task<List<Movie>> GetMoviesListAsync(GetListMovieModel filtrModel)
+        public async Task<PageModel<Movie>> GetMoviesListAsync(GetListMovieModel filterModel)
         {
             var query = _context.Movies.AsQueryable();
 
-            if (!string.IsNullOrEmpty(filtrModel.name))
+            if (!string.IsNullOrEmpty(filterModel.name))
             {
-                query = query.Where(m => m.Name.Contains(filtrModel.name));
+                query = query.Where(m => m.Name.Contains(filterModel.name));
             }
 
-            if (filtrModel.minViews != null)
+            if (filterModel.minViews != null)
             {
-                query = query.Where(m => m.Views >= filtrModel.minViews);
+                query = query.Where(m => m.Views >= filterModel.minViews);
             }
 
-            if (filtrModel.genres != null && filtrModel.genres.Any())
+            if (filterModel.genres != null && filterModel.genres.Any())
             {
-                query = query.Where(m => m.MovieGenres.Any(mg => filtrModel.genres.Contains(mg.Genre.Name)));
+                query = query.Where(m => m.MovieGenres.Any(mg => filterModel.genres.Contains(mg.Genre.Name)));
             }
 
-            query = query.Skip((filtrModel.pageNumber - 1) * filtrModel.pageSize).Take(filtrModel.pageSize);
+            var totalCount = await query.CountAsync();
 
-            return await query.Include(m => m.MovieGenres)
-                              .ThenInclude(mg => mg.Genre)
-                              .ToListAsync();
+            var items = await query
+                .Skip((filterModel.pageNumber - 1) * filterModel.pageSize)
+                .Take(filterModel.pageSize)
+                .ToListAsync();
+
+            var nextPage = (filterModel.pageNumber * filterModel.pageSize) < totalCount ? (int?)filterModel.pageNumber + 1 : null;
+
+            return new PageModel<Movie>(
+                currentPage: filterModel.pageNumber,
+                nextPage: nextPage,
+                totalCount: totalCount,
+                items: items
+            );
         }
 
         public async Task AddGenresToMovieAsync(int movieId, List<int> genreIds)
