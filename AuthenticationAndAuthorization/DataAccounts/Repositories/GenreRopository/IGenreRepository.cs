@@ -1,4 +1,5 @@
-﻿using DataAccounts.Entitys.MovieEntitys;
+﻿using DataAccounts.Entitys.GenreEntitys;
+using DataAccounts.Entitys.MovieEntitys;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace DataAccounts.Repositories.GenreRopository
         Task AddGenreAsync(Genre genre);
         Task DeleteGenreAsync(int id);
         Task AddGenresAsync(int movieId, Genre genre);
-        Task<List<GenreDto>> GetGenresAsync();
+        Task<List<Genre>> GetGenresAsync(GetGenresListModel filterModel);
     }
 }

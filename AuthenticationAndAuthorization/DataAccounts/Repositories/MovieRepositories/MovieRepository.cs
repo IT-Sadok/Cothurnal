@@ -1,6 +1,4 @@
 ﻿using DataAccounts.Entitys;
-using DataAccounts.Entitys.MovieEntitys;
-using DataAccounts.Repositories.MovieEntitys;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -52,24 +50,26 @@ namespace DataAccounts.Repositories.MovieRepositories
             return movie;
         }
 
-        public async Task<List<Movie>> GetMoviesListAsync(string name, int? minViews, List<string> genres)
+        public async Task<List<Movie>> GetMoviesListAsync(GetListMovieModel filtrModel)
         {
             var query = _context.Movies.AsQueryable();
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(filtrModel.name))
             {
-                query = query.Where(m => m.Name.Contains(name));
+                query = query.Where(m => m.Name.Contains(filtrModel.name));
             }
 
-            if (minViews != null)
+            if (filtrModel.minViews != null)
             {
-                query = query.Where(m => m.Views >= minViews);
+                query = query.Where(m => m.Views >= filtrModel.minViews);
             }
 
-            if (genres != null && genres.Any())
+            if (filtrModel.genres != null && filtrModel.genres.Any())
             {
-                query = query.Where(m => m.MovieGenres.Any(mg => genres.Contains(mg.Genre.Name)));
+                query = query.Where(m => m.MovieGenres.Any(mg => filtrModel.genres.Contains(mg.Genre.Name)));
             }
+
+            query = query.Skip((filtrModel.pageNumber - 1) * filtrModel.pageSize).Take(filtrModel.pageSize);
 
             return await query.Include(m => m.MovieGenres)
                               .ThenInclude(mg => mg.Genre)

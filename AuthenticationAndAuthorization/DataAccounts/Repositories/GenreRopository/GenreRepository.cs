@@ -1,7 +1,7 @@
 ﻿using DataAccounts.Entitys;
+using DataAccounts.Entitys.GenreEntitys;
 using DataAccounts.Entitys.MovieEntitys;
 using DataAccounts.Repositories.GenreRopository;
-using DataAccounts.Repositories.MovieEntitys;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -42,14 +42,15 @@ namespace DataAccounts.Repositories.GenreRepositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<GenreDto>> GetGenresAsync()
+        public async Task<List<Genre>> GetGenresAsync(GetGenresListModel filterModel)
         {
-            return await _context.Genres
-                .Select(m => new GenreDto
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                })
+            var query = _context.Genres.AsQueryable();
+
+            var totalCount = await query.CountAsync();
+
+            return await query
+                .Skip((filterModel.pageNumber - 1) * filterModel.pageSize)
+                .Take(filterModel.pageSize)
                 .ToListAsync();
         }
     }

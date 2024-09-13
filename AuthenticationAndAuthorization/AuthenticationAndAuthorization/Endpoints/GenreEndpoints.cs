@@ -1,6 +1,7 @@
 ﻿using AuthenticationAndAuthorization.Policy;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Model.GenreModel;
+using DataAccounts.Entitys.GenreEntitys;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthenticationAndAuthorization.Endpoints
@@ -9,14 +10,14 @@ namespace AuthenticationAndAuthorization.Endpoints
     {
         public static void MapGenreEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost("create/genre", ([FromServices] IGenreService genreService, [FromBody] CreateGenreModel genre)
+            endpoints.MapPost("genres", ([FromServices] IGenreService genreService, [FromBody] CreateGenreModel genre)
                 => genreService.CreateGenre(genre)).RequireAuthorization(Policies.AdminPolicy);
 
-            endpoints.MapPost("delete/genre", ([FromServices] IGenreService genreService, [FromBody] DeleteGenreModel genre)
+            endpoints.MapDelete("genres/{id:int}", ([FromServices] IGenreService genreService, [FromBody] DeleteGenreModel genre)
                 => genreService.DeleteGenre(genre)).RequireAuthorization(Policies.AdminPolicy);
 
-            endpoints.MapGet("get/genre", ([FromServices] IGenreService genreService)
-                => genreService.GetGenre()).RequireAuthorization(Policies.UserPolicy);
+            endpoints.MapPost("genres/{filter}", ([FromServices] IGenreService genreService, [FromBody] GetGenresListModel filterModel)
+                => genreService.GetGenre(filterModel)).RequireAuthorization(Policies.UserPolicy);
         }
     }
 

@@ -1,8 +1,10 @@
 ﻿using BusinessLogic.Model.GenreModel;
 using BusinessLogic.Model.MovieModel;
+using DataAccounts.Entitys.GenreEntitys;
 using DataAccounts.Entitys.MovieEntitys;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,6 @@ namespace BusinessLogic.Interfaces
     {
         Task CreateGenre(CreateGenreModel createModel);
         Task DeleteGenre(DeleteGenreModel deleteModel);
-        Task<List<GenreDto>> GetGenre();
+        Task<List<GenreDto>> GetGenre(GetGenresListModel filterModel);
     }
 }

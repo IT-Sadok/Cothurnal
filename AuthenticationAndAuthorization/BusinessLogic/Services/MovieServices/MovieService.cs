@@ -1,10 +1,10 @@
-﻿using BusinessLogic.Interfaces;
+﻿using AutoMapper;
+using BusinessLogic.Interfaces;
 using BusinessLogic.Model.GenreModel;
 using BusinessLogic.Model.MovieModel;
 using DataAccounts.Entitys;
 using DataAccounts.Entitys.MovieEntitys;
 using DataAccounts.Repositories.GenreRopository;
-using DataAccounts.Repositories.MovieEntitys;
 using DataAccounts.Repositories.MovieRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
@@ -15,17 +15,18 @@ namespace BusinessLogic.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IMapper _mapper;
 
-        public MovieService(IMovieRepository movieRepository)
+        public MovieService(IMovieRepository movieRepository, IMapper mapper)
         {
             _movieRepository = movieRepository;
+            _mapper = mapper;
         }
         public async Task CreateMovieAsync(CreateMovieModel createModel)
         {
             var movie = new Movie(createModel.id, createModel.name, createModel.description)
             {
-                MovieGenres = createModel.genresId.Select(id =>
-                new MovieGenres { GenreId = id }).ToList()
+                MovieGenres = createModel.genresIds.Select(id => new MovieGenres { GenreId = id }).ToList()
             };
 
             await _movieRepository.CreateMovieAsync(movie);
@@ -41,33 +42,18 @@ namespace BusinessLogic.Services
             await _movieRepository.DeleteMovieAsync(deleteModel.id);
         }
 
-        public async Task<List<MovieInfo>> GetMoviesListAsync(GetListMovieModel filtrModel)
+        public async Task<List<MovieInfo>> MovieFilter(GetListMovieModel filtrModel)
         {
-            var listOfMovie =  await _movieRepository.GetMoviesListAsync(filtrModel.name, filtrModel.minViews, filtrModel.genres);
+            var listOfMovie =  await _movieRepository.GetMoviesListAsync(filtrModel);
 
-            return listOfMovie
-                .Select(movie => new MovieInfo
-                {
-                    Id = movie.Id,
-                    Name = movie.Name,
-                    Views = movie.Views,
-                    Description = movie.Description,
-                    Genres = movie.MovieGenres.Select(mg => mg.Genre.Name).ToList()
-                }).ToList();
+            return _mapper.Map<List<MovieInfo>>(listOfMovie);
         }
 
         public async Task<MovieInfo> GetMovieAsync(GetMovieModel getModel)
         {
             var movie = await _movieRepository.GetMovieByIdAsync(getModel.movieId);
 
-            return new MovieInfo
-            {
-                Id = movie.Id,
-                Name = movie.Name,
-                Views = movie.Views,
-                Description = movie.Description,
-                Genres = movie.MovieGenres.Select(mg => mg.Genre.Name).ToList()
-            };
+            return _mapper.Map<MovieInfo>(movie);
         }
 
         public async Task AddGenresAsync(AddGenreModel addGenreModel)

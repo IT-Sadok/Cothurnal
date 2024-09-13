@@ -1,4 +1,4 @@
-﻿namespace DataAccounts.Repositories.MovieEntitys
+﻿namespace BusinessLogic.Model.MovieModel
 {
     public class MovieInfo
     {

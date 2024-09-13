@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Model.MovieModel
 {
-    public record CreateMovieModel(int id, string name, string description, List<int> genresId);
+    public record CreateMovieModel(int id, string name, string description, List<int> genresIds);
 }

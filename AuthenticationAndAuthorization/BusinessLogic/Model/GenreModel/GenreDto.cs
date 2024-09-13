@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccounts.Entitys.MovieEntitys
+namespace BusinessLogic.Model.GenreModel
 {
     public class GenreDto
     {
