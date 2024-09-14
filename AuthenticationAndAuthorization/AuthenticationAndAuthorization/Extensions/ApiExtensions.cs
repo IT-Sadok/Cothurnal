@@ -1,4 +1,5 @@
-﻿using DataAccounts;
+﻿using AuthenticationAndAuthorization.Policy;
+using DataAccounts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -39,7 +40,12 @@ namespace AuthenticationAndAuthorization.Extensions
                         ValidateIssuerSigningKey = true
                     };
                 });
-            services.AddAuthorization();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.UserPolicy, policy => policy.RequireRole("User", "Admin"));
+                options.AddPolicy(Policies.AdminPolicy, policy => policy.RequireRole("Admin"));
+            });
         }
     }
 }
