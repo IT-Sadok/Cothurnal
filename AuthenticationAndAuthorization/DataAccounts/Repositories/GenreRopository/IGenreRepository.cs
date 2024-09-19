@@ -11,7 +11,7 @@ namespace DataAccounts.Repositories.GenreRopository
 {
     public interface IGenreRepository
     {
-        Task AddGenreAsync(Genre genre);
+        Task CreateGenreAsync(Genre genre);
         Task DeleteGenreAsync(int id);
         Task AddGenresAsync(int movieId, Genre genre);
         Task<PageModel<Genre>> GetGenresAsync(GetGenresListModel filterModel);

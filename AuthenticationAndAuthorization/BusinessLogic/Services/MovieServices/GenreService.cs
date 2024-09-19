@@ -22,7 +22,7 @@ namespace BusinessLogic.Services
 
         public async Task CreateGenre(CreateGenreModel createModel)
         {
-            await _genreRepository.AddGenreAsync(new Genre(createModel.id, createModel.name));
+            await _genreRepository.CreateGenreAsync(new Genre(createModel.name) { Id = createModel.id});
         }
 
         public async Task DeleteGenre(DeleteGenreModel deleteModel)

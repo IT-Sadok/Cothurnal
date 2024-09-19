@@ -1,41 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using BusinessLogic;
-using DataAccounts;
-using DataAccounts.Repositories;
-using BusinessLogic.Model;
+using AuthenticationAndAuthorization.Endpoints;
 using AuthenticationAndAuthorization.Extensions;
 using AuthenticationAndAuthorization;
-using DataAccounts.Repositories.GenreRopository;
-using BusinessLogic.Interfaces;
-using BusinessLogic.Services;
-using BusinessLogic.Model.MovieModel;
-using DataAccounts.Repositories.MovieRepositories;
-using DataAccounts.Repositories.GenreRepositories;
-using BusinessLogic.Model.GenreModel;
-using AuthenticationAndAuthorization.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddApiAuthencation(builder.Configuration);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IJwtService, JwtService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieService, MovieService>();
-builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-builder.Services.AddScoped<IGenreService, GenreService>();
-builder.Services.AddScoped<RoleProvider>(); 
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DataBase")));
-
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 

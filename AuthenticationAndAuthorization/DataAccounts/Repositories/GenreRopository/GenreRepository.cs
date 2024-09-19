@@ -20,7 +20,7 @@ namespace DataAccounts.Repositories.GenreRepositories
             _context = context;
         }
 
-        public async Task AddGenreAsync(Genre genre)
+        public async Task CreateGenreAsync(Genre genre)
         {
             await _context.Genres.AddAsync(genre);
             await _context.SaveChangesAsync();

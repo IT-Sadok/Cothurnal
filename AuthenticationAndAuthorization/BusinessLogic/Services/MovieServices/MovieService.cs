@@ -24,8 +24,9 @@ namespace BusinessLogic.Services
         }
         public async Task CreateMovieAsync(CreateMovieModel createModel)
         {
-            var movie = new Movie(createModel.id, createModel.name, createModel.description)
+            var movie = new Movie(createModel.name, createModel.description)
             {
+                Id = createModel.id,
                 MovieGenres = createModel.genresIds.Select(id => new MovieGenres { GenreId = id }).ToList()
             };
 
