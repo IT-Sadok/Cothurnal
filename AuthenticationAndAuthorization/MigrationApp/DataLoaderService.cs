@@ -6,24 +6,25 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using DataAccounts.Repositories;
 using System.Data;
+using System.Threading.Channels;
 
 namespace DataLoader
 {
     public class DataLoaderService
     {
-        private readonly string _jsonData = Path.Combine(Directory.GetCurrentDirectory(),"data.json");
         private readonly ApplicationDbContext _context;
-        private readonly IUserRepository _userRepositories;
+        private readonly IUserRepository _userRepository;
 
         public DataLoaderService(ApplicationDbContext context, IUserRepository userRepositories)
         {
             _context = context;
-            _userRepositories = userRepositories;
+            _userRepository = userRepositories;
         }
 
         public async Task LoadDataAsync()
         {
-            var jsonData = File.ReadAllText(_jsonData);
+            Console.WriteLine("File path:");
+            var jsonData = File.ReadAllText(Console.ReadLine());
             var rootJson = JsonConvert.DeserializeObject<RootJson>(jsonData);
 
             await LoadUsersAsync(rootJson.Users);
@@ -38,6 +39,7 @@ namespace DataLoader
                 try
                 {
                     string role = UserConstants.User;
+                    string defaultPassword = "DefaultPassword123";
 
                     var user = new User
                     {
@@ -51,12 +53,12 @@ namespace DataLoader
                         role = UserConstants.Admin;
                     }
 
-                    await _userRepositories.Register(user, userJson.PasswordHash, role);
+                    await _userRepository.Register(user, defaultPassword, role);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new InvalidOperationException("Failed to get the users into the system");
                 }
             }
         }
@@ -77,7 +79,7 @@ namespace DataLoader
                 }
                 catch (Exception)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("failed to get the genres into the system");
                 }
             }
         }
@@ -102,7 +104,7 @@ namespace DataLoader
                 }
                 catch (Exception)
                 {
-                    throw;
+                    throw new InvalidOperationException("failed to get the movies into the system");
                 }
             }
         }

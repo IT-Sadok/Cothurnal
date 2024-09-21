@@ -12,5 +12,6 @@ namespace DataAccounts.Repositories
         Task<IList<string>> GetUserRoles(User user);
         Task<User> GetByEmail(string email);
         Task<bool> SignIn(string email, string password, bool isPersistent, bool lockoutOnFailure);
+        Task ChangePasswordAsync(string email, string oldPasswordld, string newPasswordld);
     }
 }
