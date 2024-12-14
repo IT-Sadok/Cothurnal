@@ -5,5 +5,6 @@ namespace DataAccounts
 {
     public class User : IdentityUser<Guid>
     {
+        public string? ExternalId { get; set; }
     }
 }

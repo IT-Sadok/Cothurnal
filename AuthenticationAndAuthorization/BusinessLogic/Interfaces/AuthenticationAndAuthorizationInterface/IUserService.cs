@@ -1,6 +1,7 @@
 ﻿
 
 using BusinessLogic.Model;
+using BusinessLogic.Model.AuthenticationAndAuthorizationModel;
 
 namespace BusinessLogic
 {
@@ -8,5 +9,6 @@ namespace BusinessLogic
     {
         Task RegisterUserAsync(RegisterUserRequest model);
         Task<string> LoginUserAsync(LoginUserRequest model);
+        Task ChangePasswordAsync(ChangePasswordModel model);
     }
 }

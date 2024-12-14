@@ -69,6 +69,8 @@ namespace DataAccounts.Repositories.MovieRepositories
             var items = await query
                 .Skip((filterModel.pageNumber - 1) * filterModel.pageSize)
                 .Take(filterModel.pageSize)
+                .Include(m => m.MovieGenres)
+                .ThenInclude(mg => mg.Genre)
                 .ToListAsync();
 
             var nextPage = (filterModel.pageNumber * filterModel.pageSize) < totalCount ? (int?)filterModel.pageNumber + 1 : null;

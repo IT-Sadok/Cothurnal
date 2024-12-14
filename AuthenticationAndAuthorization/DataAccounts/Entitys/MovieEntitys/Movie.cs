@@ -9,9 +9,8 @@ namespace DataAccounts.Entitys
 {
     public class Movie
     {
-        public Movie(int id, string name, string description)
+        public Movie(string name, string description)
         {
-            Id = id;
             Name = name;
             Description = description;
             MovieGenres = new List<MovieGenres>();
@@ -21,6 +20,7 @@ namespace DataAccounts.Entitys
         public string Name { get; set; }
         public string Description { get; set; }
         public int Views { get; set; }
+        public string? ExternalId { get; set; }
         public List<MovieGenres> MovieGenres { get; set; }
     }
 }

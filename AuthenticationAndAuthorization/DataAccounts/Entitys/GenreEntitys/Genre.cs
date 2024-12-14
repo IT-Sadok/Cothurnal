@@ -8,15 +8,15 @@ namespace DataAccounts.Entitys.MovieEntitys
 {
     public class Genre
     {
-        public Genre(int id, string name)
+        public Genre(string name)
         {
-            Id = id;
             Name = name;
             MovieGenres = new List<MovieGenres>();
         }
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public string? ExternalId { get; set; }
         public List<MovieGenres> MovieGenres { get; set; }
     }
 }

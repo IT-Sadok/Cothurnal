@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.Model;
 using BusinessLogic;
 using Microsoft.AspNetCore.Mvc;
+using BusinessLogic.Model.AuthenticationAndAuthorizationModel;
 
 namespace AuthenticationAndAuthorization.Endpoints
 {
@@ -13,6 +14,9 @@ namespace AuthenticationAndAuthorization.Endpoints
 
             endpoints.MapPost("sign-in", ([FromServices] IUserService userService, [FromBody] LoginUserRequest usermodel)
                 => userService.LoginUserAsync(usermodel));
+            
+            endpoints.MapPost("change/password{userEmail}", ([FromServices] IUserService userService, [FromBody] ChangePasswordModel usermodel)
+                => userService.ChangePasswordAsync(usermodel));
         }
     }
 }

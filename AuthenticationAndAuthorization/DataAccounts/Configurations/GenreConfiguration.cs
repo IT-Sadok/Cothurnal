@@ -17,9 +17,9 @@ namespace DataAccounts.Configurations
             builder.HasKey(x => x.Id);
 
             builder.HasData(
-                new Genre(1, "thriller"),
-                new Genre(2, "horror"),
-                new Genre(3, "comedy")
+                new Genre("thriller") { Id = 1},
+                new Genre("horror") { Id = 2 },
+                new Genre("comedy") { Id = 3 }
             );
         }
     }

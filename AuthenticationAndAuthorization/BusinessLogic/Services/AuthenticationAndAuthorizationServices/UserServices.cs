@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogic;
 using BusinessLogic.Model;
+using BusinessLogic.Model.AuthenticationAndAuthorizationModel;
 using DataAccounts;
 using DataAccounts.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -34,7 +35,7 @@ namespace BusinessLogic
 
             if (result == false)
             {
-                throw new ArgumentException("Password is not correct!");
+                throw new InvalidOperationException("Password is not correct!");
             }
 
             return _jwtService.GenerateJwt(user.Id, user.UserName, roles);
@@ -52,6 +53,11 @@ namespace BusinessLogic
             var user = _mapper.Map<User>(request);
 
             await _userRepositories.Register(user,request.Password,role);
+        }
+
+        public async Task ChangePasswordAsync(ChangePasswordModel model)
+        {
+            await _userRepositories.ChangePasswordAsync(model.Email, model.OldPassword, model.NewPassword);
         }
     }
 }

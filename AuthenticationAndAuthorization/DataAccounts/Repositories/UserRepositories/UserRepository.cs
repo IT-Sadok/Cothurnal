@@ -61,12 +61,23 @@ namespace DataAccounts
             return false;
         }
 
+        public async Task ChangePasswordAsync(string email, string oldPasswordld, string newPasswordld)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPasswordld, newPasswordld);
+            if (result.Succeeded)
+            {
+                await _signInManager.RefreshSignInAsync(user);
+            }
+        }
+
         public async Task<IList<string>> GetUserRoles(User user)
         {
             return await _userManager.GetRolesAsync(user);
         }
 
-        public Task<User> GetByEmail(string email) =>
+        public Task<User?> GetByEmail(string email) =>
             _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
     }       
 }
